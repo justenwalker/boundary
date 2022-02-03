@@ -82,7 +82,7 @@ jobs:
           BINARY_NAME="buf"
           BUF_PACKAGE="${BINARY_NAME}-$(uname -s)-$(uname -m)"
           curl -sSL https://github.com/bufbuild/buf/releases/download/v${VERSION}/$BUF_PACKAGE \
-          -o "${BIN}/${BINARY_NAME}
+          -o "${BIN}/${BINARY_NAME}"
           chmod +x "${BIN}/${BINARY_NAME}"
         name: Install protobuf
     - run:
@@ -386,7 +386,7 @@ workflows:
 #                     BINARY_NAME=\"buf\"
 #                     BUF_PACKAGE=\"${BINARY_NAME}-$(uname -s)-$(uname -m)\"
 #                     curl -sSL https://github.com/bufbuild/buf/releases/download/v${VERSION}/$BUF_PACKAGE \\
-#                     -o \"${BIN}/${BINARY_NAME}
+#                     -o \"${BIN}/${BINARY_NAME}\"
 #                     chmod +x \"${BIN}/${BINARY_NAME}\"
 #                 name: Install protobuf
 # executors:

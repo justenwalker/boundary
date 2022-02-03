@@ -1,0 +1,18 @@
+executor: go-machine-medium
+steps:
+- checkout
+- install-go
+- run:
+    name: "Check proto deltas"
+    command: |
+      make proto
+      rm -f diffFile
+      git diff > diffFile
+      [ -s diffFile ] && exit -1
+- run:
+    name: "Check API deltas"
+    command: |
+      make api
+      rm -f diffFile
+      git diff > diffFile
+      [ -s diffFile ] && exit -1

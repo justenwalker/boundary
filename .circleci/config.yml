@@ -49,6 +49,37 @@ jobs:
         command: |
           make test-sql POSTGRES_DOCKER_IMAGE_BASE=docker.mirror.hashicorp.services/postgres PG_DOCKER_TAG=11-alpine
         name: Run SQL PgTap Tests
+  proto-and-api-deltas:
+    machine:
+      image: ubuntu-2004:202111-01
+    resource_class: medium
+    working_directory: ~/boundary
+    steps:
+    - checkout
+    - run:
+        command: |
+          make install-go
+          source ~/.bashrc
+          echo 'export GOROOT=$GOROOT' >> "$BASH_ENV"
+          echo 'export GOPATH=$GOPATH' >> "$BASH_ENV"
+          echo 'export PATH=$PATH' >> "$BASH_ENV"
+          echo "$ go version"
+          go version
+        name: Install go
+    - run:
+        command: |
+          make proto
+          rm -f diffFile
+          git diff > diffFile
+          [ -s diffFile ] && exit -1
+        name: Check proto deltas
+    - run:
+        command: |-
+          make api
+          rm -f diffFile
+          git diff > diffFile
+          [ -s diffFile ] && exit -1
+        name: Check API deltas
   test-sdk:
     machine:
       image: ubuntu-2004:202111-01
@@ -290,6 +321,7 @@ workflows:
           branches:
             only:
             - stable-website
+    - proto-and-api-deltas
   trigger-merge-to-ent:
     jobs:
     - trigger-merge-to-ent:
@@ -363,6 +395,25 @@ workflows:
 #                 fail_only: true
 #                 only_for_branches: master
 #                 webhook: webhook
+#     proto-and-api-deltas:
+#         executor: go-machine-medium
+#         steps:
+#             - checkout
+#             - install-go
+#             - run:
+#                 command: |
+#                     make proto
+#                     rm -f diffFile
+#                     git diff > diffFile
+#                     [ -s diffFile ] && exit -1
+#                 name: Check proto deltas
+#             - run:
+#                 command: |-
+#                     make api
+#                     rm -f diffFile
+#                     git diff > diffFile
+#                     [ -s diffFile ] && exit -1
+#                 name: Check API deltas
 #     test-api:
 #         executor: go-machine-medium
 #         steps:
@@ -424,6 +475,7 @@ workflows:
 #                     branches:
 #                         only:
 #                             - stable-website
+#             - proto-and-api-deltas
 #     trigger-merge-to-ent:
 #         jobs:
 #             - trigger-merge-to-ent:

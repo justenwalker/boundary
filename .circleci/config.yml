@@ -67,18 +67,29 @@ jobs:
           go version
         name: Install go
     - run:
+        command: |-
+          VERSION="3.17.3"
+          PB_REL="https://github.com/protocolbuffers/protobuf/releases"
+          ARCH="$(uname -m)"
+
+          PACKAGE_NAME=protoc-$VERSION-linux-$ARCH.zip
+          curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
+          unzip $PACKAGE_NAME -d $HOME/.locaL
+          export PATH="$PATH:$HOME/.local/bin"
+        name: Install protobuf
+    - run:
         command: |
           make proto
-          rm -f diffFile
-          git diff > diffFile
-          [ -s diffFile ] && exit -1
+          git diff --exit-code
+          git status --porcelain
+          test -z $(git status --porcelain)
         name: Check proto deltas
     - run:
         command: |-
           make api
-          rm -f diffFile
-          git diff > diffFile
-          [ -s diffFile ] && exit -1
+          git diff --exit-code
+          git status --porcelain
+          test -z $(git status --porcelain)
         name: Check API deltas
   test-sdk:
     machine:
@@ -347,6 +358,21 @@ workflows:
 #                     echo \"$ go version\"
 #                     go version
 #                 name: Install go
+#     install-protobuf:
+#         description: |
+#             Ensure protobuf is installed
+#         steps:
+#             - run:
+#                 command: |-
+#                     VERSION=\"3.17.3\"
+#                     PB_REL=\"https://github.com/protocolbuffers/protobuf/releases\"
+#                     ARCH=\"$(uname -m)\"
+# 
+#                     PACKAGE_NAME=protoc-$VERSION-linux-$ARCH.zip
+#                     curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
+#                     unzip $PACKAGE_NAME -d $HOME/.locaL
+#                     export PATH=\"$PATH:$HOME/.local/bin\"
+#                 name: Install protobuf
 # executors:
 #     go-machine:
 #         machine:
@@ -400,19 +426,20 @@ workflows:
 #         steps:
 #             - checkout
 #             - install-go
+#             - install-protobuf
 #             - run:
 #                 command: |
 #                     make proto
-#                     rm -f diffFile
-#                     git diff > diffFile
-#                     [ -s diffFile ] && exit -1
+#                     git diff --exit-code
+#                     git status --porcelain
+#                     test -z $(git status --porcelain)
 #                 name: Check proto deltas
 #             - run:
 #                 command: |-
 #                     make api
-#                     rm -f diffFile
-#                     git diff > diffFile
-#                     [ -s diffFile ] && exit -1
+#                     git diff --exit-code
+#                     git status --porcelain
+#                     test -z $(git status --porcelain)
 #                 name: Check API deltas
 #     test-api:
 #         executor: go-machine-medium

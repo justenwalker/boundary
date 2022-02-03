@@ -2,17 +2,18 @@ executor: go-machine-medium
 steps:
 - checkout
 - install-go
+- install-protobuf
 - run:
     name: "Check proto deltas"
     command: |
       make proto
-      rm -f diffFile
-      git diff > diffFile
-      [ -s diffFile ] && exit -1
+      git diff --exit-code
+      git status --porcelain
+      test -z $(git status --porcelain)
 - run:
     name: "Check API deltas"
     command: |
       make api
-      rm -f diffFile
-      git diff > diffFile
-      [ -s diffFile ] && exit -1
+      git diff --exit-code
+      git status --porcelain
+      test -z $(git status --porcelain)

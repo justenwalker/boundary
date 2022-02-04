@@ -84,16 +84,18 @@ jobs:
     - run:
         command: |
           make protobuild
+          echo "Testing git diffs..."
           git diff --exit-code
           git status --porcelain
-          test -z $(git status --porcelain)
+          test -z "$(git status --porcelain)"
         name: Check proto deltas
     - run:
         command: |-
           make api
+          echo "Testing git diffs..."
           git diff --exit-code
           git status --porcelain
-          test -z $(git status --porcelain)
+          test -z "$(git status --porcelain)"
         name: Check API deltas
   test-sdk:
     machine:
@@ -438,16 +440,18 @@ workflows:
 #             - run:
 #                 command: |
 #                     make protobuild
+#                     echo \"Testing git diffs...\"
 #                     git diff --exit-code
 #                     git status --porcelain
-#                     test -z $(git status --porcelain)
+#                     test -z \"$(git status --porcelain)\"
 #                 name: Check proto deltas
 #             - run:
 #                 command: |-
 #                     make api
+#                     echo \"Testing git diffs...\"
 #                     git diff --exit-code
 #                     git status --porcelain
-#                     test -z $(git status --porcelain)
+#                     test -z \"$(git status --porcelain)\"
 #                 name: Check API deltas
 #     test-api:
 #         executor: go-machine-medium

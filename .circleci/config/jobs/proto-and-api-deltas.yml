@@ -6,7 +6,7 @@ steps:
 - run:
     name: "Check proto deltas"
     command: |
-      make proto
+      make protobuild
       git diff --exit-code
       git status --porcelain
       test -z $(git status --porcelain)

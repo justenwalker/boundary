@@ -5,17 +5,4 @@ steps:
   - run:
       name: "Install protobuf"
       command: |
-        VERSION="3.17.3"
-        PB_REL="https://github.com/protocolbuffers/protobuf/releases"
-        ARCH="$(uname -m)"
-
-        PACKAGE_NAME=protoc-$VERSION-linux-$ARCH.zip
-        curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
-        unzip $PACKAGE_NAME -d $HOME/.local
-        export PATH="$PATH:$HOME/.local/bin"
-
-        go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
-        go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0
-        go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
-        go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
-        go install github.com/favadi/protoc-go-inject-tag
+        make tools

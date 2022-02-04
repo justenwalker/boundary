@@ -11,15 +11,13 @@ steps:
 
         PACKAGE_NAME=protoc-$VERSION-linux-$ARCH.zip
         curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
-        unzip $PACKAGE_NAME -d $HOME/.locaL
+        unzip $PACKAGE_NAME -d $HOME/.local
         export PATH="$PATH:$HOME/.local/bin"
 
         BIN="$HOME/.local/bin"
         VERSION="0.56.0"
         BINARY_NAME="buf"
         BUF_PACKAGE="${BINARY_NAME}-$(uname -s)-$(uname -m)"
-        curl -o ${BINARY_NAME} -LO https://github.com/bufbuild/buf/releases/download/v${VERSION}/$BUF_PACKAGE
+        curl -o ${BIN}/${BINARY_NAME} -LO https://github.com/bufbuild/buf/releases/download/v${VERSION}/$BUF_PACKAGE
         echo "Downloaded buf package..."
-        ls
-        mv ${BINARY_NAME} ${BIN}/
         chmod +x "${BIN}/${BINARY_NAME}"

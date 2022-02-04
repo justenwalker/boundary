@@ -84,8 +84,8 @@ jobs:
           curl -o ${BINARY_NAME} -LO https://github.com/bufbuild/buf/releases/download/v${VERSION}/$BUF_PACKAGE
           echo "Downloaded buf package..."
           ls
-          #mv $BUF_PACKAGE ${BIN}/${BINARY_NAME}
-          #chmod +x "${BIN}/${BINARY_NAME}"
+          mv ${BINARY_NAME} ${BIN}/
+          chmod +x "${BIN}/${BINARY_NAME}"
         name: Install protobuf
     - run:
         command: |
@@ -390,8 +390,8 @@ workflows:
 #                     curl -o ${BINARY_NAME} -LO https://github.com/bufbuild/buf/releases/download/v${VERSION}/$BUF_PACKAGE
 #                     echo \"Downloaded buf package...\"
 #                     ls
-#                     #mv $BUF_PACKAGE ${BIN}/${BINARY_NAME}
-#                     #chmod +x \"${BIN}/${BINARY_NAME}\"
+#                     mv ${BINARY_NAME} ${BIN}/
+#                     chmod +x \"${BIN}/${BINARY_NAME}\"
 #                 name: Install protobuf
 # executors:
 #     go-machine:

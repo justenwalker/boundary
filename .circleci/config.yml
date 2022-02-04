@@ -49,7 +49,7 @@ jobs:
         command: |
           make test-sql POSTGRES_DOCKER_IMAGE_BASE=docker.mirror.hashicorp.services/postgres PG_DOCKER_TAG=11-alpine
         name: Run SQL PgTap Tests
-  proto-and-api-deltas:
+  make-gen-deltas:
     machine:
       image: ubuntu-2004:202111-01
     resource_class: medium
@@ -83,21 +83,13 @@ jobs:
           protoc --version
         name: Install protobuf
     - run:
-        command: |
-          make protobuild
-          echo "Testing git diffs..."
-          git diff --exit-code
-          git status --porcelain
-          test -z "$(git status --porcelain)"
-        name: Check proto deltas
-    - run:
         command: |-
-          make api
+          make gen
           echo "Testing git diffs..."
           git diff --exit-code
           git status --porcelain
           test -z "$(git status --porcelain)"
-        name: Check API deltas
+        name: Check make gen deltas
   test-sdk:
     machine:
       image: ubuntu-2004:202111-01
@@ -339,7 +331,7 @@ workflows:
           branches:
             only:
             - stable-website
-    - proto-and-api-deltas
+    - make-gen-deltas
   trigger-merge-to-ent:
     jobs:
     - trigger-merge-to-ent:
@@ -433,28 +425,20 @@ workflows:
 #                 fail_only: true
 #                 only_for_branches: master
 #                 webhook: webhook
-#     proto-and-api-deltas:
+#     make-gen-deltas:
 #         executor: go-machine-medium
 #         steps:
 #             - checkout
 #             - install-go
 #             - install-protobuf
 #             - run:
-#                 command: |
-#                     make protobuild
-#                     echo \"Testing git diffs...\"
-#                     git diff --exit-code
-#                     git status --porcelain
-#                     test -z \"$(git status --porcelain)\"
-#                 name: Check proto deltas
-#             - run:
 #                 command: |-
-#                     make api
+#                     make gen
 #                     echo \"Testing git diffs...\"
 #                     git diff --exit-code
 #                     git status --porcelain
 #                     test -z \"$(git status --porcelain)\"
-#                 name: Check API deltas
+#                 name: Check make gen deltas
 #     test-api:
 #         executor: go-machine-medium
 #         steps:
@@ -516,7 +500,7 @@ workflows:
 #                     branches:
 #                         only:
 #                             - stable-website
-#             - proto-and-api-deltas
+#             - make-gen-deltas
 #     trigger-merge-to-ent:
 #         jobs:
 #             - trigger-merge-to-ent:

@@ -76,6 +76,7 @@ jobs:
           PACKAGE_NAME=protoc-$VERSION-linux-$ARCH.zip
           curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
           unzip $PACKAGE_NAME -d $HOME/.local
+          rm $PACKAGE_NAME
 
           echo 'export PATH=$HOME/.local/bin:$PATH' >> "$BASH_ENV"
           echo "$ protoc --version"
@@ -378,6 +379,7 @@ workflows:
 #                     PACKAGE_NAME=protoc-$VERSION-linux-$ARCH.zip
 #                     curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
 #                     unzip $PACKAGE_NAME -d $HOME/.local
+#                     rm $PACKAGE_NAME
 # 
 #                     echo 'export PATH=$HOME/.local/bin:$PATH' >> \"$BASH_ENV\"
 #                     echo \"$ protoc --version\"

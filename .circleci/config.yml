@@ -77,7 +77,7 @@ jobs:
           curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
           unzip $PACKAGE_NAME -d $HOME/.local
 
-          echo 'export PATH=$HOME/.local/bin:$PATH' >> "$BASH_ENV"'
+          echo 'export PATH=$HOME/.local/bin:$PATH' >> "$BASH_ENV"
           echo "$ protoc --version"
           protoc --version
         name: Install protobuf
@@ -377,7 +377,7 @@ workflows:
 #                     curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
 #                     unzip $PACKAGE_NAME -d $HOME/.local
 # 
-#                     echo 'export PATH=$HOME/.local/bin:$PATH' >> \"$BASH_ENV\"'
+#                     echo 'export PATH=$HOME/.local/bin:$PATH' >> \"$BASH_ENV\"
 #                     echo \"$ protoc --version\"
 #                     protoc --version
 #                 name: Install protobuf

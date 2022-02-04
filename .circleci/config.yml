@@ -76,6 +76,8 @@ jobs:
           curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
           unzip $PACKAGE_NAME -d $HOME/.local
           export PATH="$PATH:$HOME/.local/bin"
+
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
         name: Install protobuf
     - run:
         command: |
@@ -372,6 +374,8 @@ workflows:
 #                     curl -LO $PB_REL/download/v$VERSION/$PACKAGE_NAME
 #                     unzip $PACKAGE_NAME -d $HOME/.local
 #                     export PATH=\"$PATH:$HOME/.local/bin\"
+# 
+#                     go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 #                 name: Install protobuf
 # executors:
 #     go-machine:
